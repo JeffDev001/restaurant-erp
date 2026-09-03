@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  STAFF
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum StaffStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(STAFF)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders Order[]
+  staff  Staff?
+}
+
+model Staff {
+  id        String      @id @default(cuid())
+  name      String
+  email     String      @unique
+  phone     String?
+  role      String
+  status    StaffStatus @default(ACTIVE)
+  createdAt DateTime    @default(now())
+
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model MenuItem {
+  id          String   @id @default(cuid())
+  name        String
+  category    String
+  price       Decimal  @db.Decimal(10, 2)
+  available   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems OrderItem[]
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  total     Decimal     @db.Decimal(10, 2)
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  items OrderItem[]
+  sale  Sale?
+}
+
+model OrderItem {
+  id         String   @id @default(cuid())
+  quantity   Int
+  price      Decimal  @db.Decimal(10, 2)
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+model Inventory {
+  id           String   @id @default(cuid())
+  name         String
+  quantity     Float    @default(0)
+  unit         String   @default("pcs")
+  minimumStock Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Sale {
+  id            String   @id @default(cuid())
+  amount        Decimal  @db.Decimal(10, 2)
+  paymentMethod String   @default("CASH")
+  createdAt     DateTime @default(now())
+
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
