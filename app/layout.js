@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Restaurant ERP",
+  title: "Devins Restaurant ERP",
   description: "Welcome to Devins Restaurant ERP",
 };
 
