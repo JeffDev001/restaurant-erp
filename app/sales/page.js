@@ -523,7 +523,7 @@ export default function SalesPage() {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[600px]">
+                <table className="w-full min-w-150">
                   <thead className="border-b border-gray-200 bg-gray-50">
                     <tr>
                       <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
@@ -587,7 +587,7 @@ export default function SalesPage() {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[600px]">
+                <table className="w-full min-w-150">
                   <thead className="border-b border-gray-200 bg-gray-50">
                     <tr>
                       <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
@@ -724,7 +724,7 @@ export default function SalesPage() {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[1000px]">
+                <table className="w-full min-w-250">
                   <thead className="border-b border-gray-200 bg-gray-50">
                     <tr>
                       <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">

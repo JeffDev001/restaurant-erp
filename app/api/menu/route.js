@@ -51,9 +51,6 @@ export async function GET() {
       },
     });
 
-    console.log("CURRENT RESTAURANT:", restaurantId);
-    console.log("CATEGORIES:", categories);
-
     return NextResponse.json({
       success: true,
       menuItems,

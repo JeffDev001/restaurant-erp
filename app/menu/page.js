@@ -375,7 +375,7 @@ export default function MenuPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[950px]">
+              <table className="w-full min-w-237.5">
                 <thead className="bg-gray-50 text-left text-sm text-gray-500">
                   <tr>
                     <th className="px-6 py-4 font-medium">
