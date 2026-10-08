@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.ts"
-import type * as Prisma from "../internal/prismaNamespace.ts"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Staff
@@ -26,70 +26,82 @@ export type AggregateStaff = {
 
 export type StaffMinAggregateOutputType = {
   id: string | null
-  name: string | null
-  email: string | null
+  restaurantId: string | null
+  userId: string | null
+  firstName: string | null
+  lastName: string | null
   phone: string | null
-  role: string | null
+  position: $Enums.StaffPosition | null
   status: $Enums.StaffStatus | null
   createdAt: Date | null
-  userId: string | null
+  updatedAt: Date | null
 }
 
 export type StaffMaxAggregateOutputType = {
   id: string | null
-  name: string | null
-  email: string | null
+  restaurantId: string | null
+  userId: string | null
+  firstName: string | null
+  lastName: string | null
   phone: string | null
-  role: string | null
+  position: $Enums.StaffPosition | null
   status: $Enums.StaffStatus | null
   createdAt: Date | null
-  userId: string | null
+  updatedAt: Date | null
 }
 
 export type StaffCountAggregateOutputType = {
   id: number
-  name: number
-  email: number
+  restaurantId: number
+  userId: number
+  firstName: number
+  lastName: number
   phone: number
-  role: number
+  position: number
   status: number
   createdAt: number
-  userId: number
+  updatedAt: number
   _all: number
 }
 
 
 export type StaffMinAggregateInputType = {
   id?: true
-  name?: true
-  email?: true
+  restaurantId?: true
+  userId?: true
+  firstName?: true
+  lastName?: true
   phone?: true
-  role?: true
+  position?: true
   status?: true
   createdAt?: true
-  userId?: true
+  updatedAt?: true
 }
 
 export type StaffMaxAggregateInputType = {
   id?: true
-  name?: true
-  email?: true
+  restaurantId?: true
+  userId?: true
+  firstName?: true
+  lastName?: true
   phone?: true
-  role?: true
+  position?: true
   status?: true
   createdAt?: true
-  userId?: true
+  updatedAt?: true
 }
 
 export type StaffCountAggregateInputType = {
   id?: true
-  name?: true
-  email?: true
+  restaurantId?: true
+  userId?: true
+  firstName?: true
+  lastName?: true
   phone?: true
-  role?: true
+  position?: true
   status?: true
   createdAt?: true
-  userId?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -167,13 +179,15 @@ export type StaffGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type StaffGroupByOutputType = {
   id: string
-  name: string
-  email: string
+  restaurantId: string | null
+  userId: string | null
+  firstName: string
+  lastName: string
   phone: string | null
-  role: string
+  position: $Enums.StaffPosition
   status: $Enums.StaffStatus
   createdAt: Date
-  userId: string | null
+  updatedAt: Date
   _count: StaffCountAggregateOutputType | null
   _min: StaffMinAggregateOutputType | null
   _max: StaffMaxAggregateOutputType | null
@@ -199,52 +213,63 @@ export type StaffWhereInput = {
   OR?: Prisma.StaffWhereInput[]
   NOT?: Prisma.StaffWhereInput | Prisma.StaffWhereInput[]
   id?: Prisma.StringFilter<"Staff"> | string
-  name?: Prisma.StringFilter<"Staff"> | string
-  email?: Prisma.StringFilter<"Staff"> | string
+  restaurantId?: Prisma.StringNullableFilter<"Staff"> | string | null
+  userId?: Prisma.StringNullableFilter<"Staff"> | string | null
+  firstName?: Prisma.StringFilter<"Staff"> | string
+  lastName?: Prisma.StringFilter<"Staff"> | string
   phone?: Prisma.StringNullableFilter<"Staff"> | string | null
-  role?: Prisma.StringFilter<"Staff"> | string
+  position?: Prisma.EnumStaffPositionFilter<"Staff"> | $Enums.StaffPosition
   status?: Prisma.EnumStaffStatusFilter<"Staff"> | $Enums.StaffStatus
   createdAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
-  userId?: Prisma.StringNullableFilter<"Staff"> | string | null
+  updatedAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
+  restaurant?: Prisma.XOR<Prisma.RestaurantNullableScalarRelationFilter, Prisma.RestaurantWhereInput> | null
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type StaffOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  restaurantId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  role?: Prisma.SortOrder
+  position?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  restaurant?: Prisma.RestaurantOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type StaffWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  email?: string
   userId?: string
   AND?: Prisma.StaffWhereInput | Prisma.StaffWhereInput[]
   OR?: Prisma.StaffWhereInput[]
   NOT?: Prisma.StaffWhereInput | Prisma.StaffWhereInput[]
-  name?: Prisma.StringFilter<"Staff"> | string
+  restaurantId?: Prisma.StringNullableFilter<"Staff"> | string | null
+  firstName?: Prisma.StringFilter<"Staff"> | string
+  lastName?: Prisma.StringFilter<"Staff"> | string
   phone?: Prisma.StringNullableFilter<"Staff"> | string | null
-  role?: Prisma.StringFilter<"Staff"> | string
+  position?: Prisma.EnumStaffPositionFilter<"Staff"> | $Enums.StaffPosition
   status?: Prisma.EnumStaffStatusFilter<"Staff"> | $Enums.StaffStatus
   createdAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
+  restaurant?: Prisma.XOR<Prisma.RestaurantNullableScalarRelationFilter, Prisma.RestaurantWhereInput> | null
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-}, "id" | "email" | "userId">
+}, "id" | "userId">
 
 export type StaffOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  restaurantId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  role?: Prisma.SortOrder
+  position?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.StaffCountOrderByAggregateInput
   _max?: Prisma.StaffMaxOrderByAggregateInput
   _min?: Prisma.StaffMinOrderByAggregateInput
@@ -255,89 +280,114 @@ export type StaffScalarWhereWithAggregatesInput = {
   OR?: Prisma.StaffScalarWhereWithAggregatesInput[]
   NOT?: Prisma.StaffScalarWhereWithAggregatesInput | Prisma.StaffScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Staff"> | string
-  name?: Prisma.StringWithAggregatesFilter<"Staff"> | string
-  email?: Prisma.StringWithAggregatesFilter<"Staff"> | string
+  restaurantId?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
+  userId?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
+  firstName?: Prisma.StringWithAggregatesFilter<"Staff"> | string
+  lastName?: Prisma.StringWithAggregatesFilter<"Staff"> | string
   phone?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
-  role?: Prisma.StringWithAggregatesFilter<"Staff"> | string
+  position?: Prisma.EnumStaffPositionWithAggregatesFilter<"Staff"> | $Enums.StaffPosition
   status?: Prisma.EnumStaffStatusWithAggregatesFilter<"Staff"> | $Enums.StaffStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Staff"> | Date | string
-  userId?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Staff"> | Date | string
 }
 
 export type StaffCreateInput = {
   id?: string
-  name: string
-  email: string
+  firstName: string
+  lastName: string
   phone?: string | null
-  role: string
+  position: $Enums.StaffPosition
   status?: $Enums.StaffStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
+  restaurant?: Prisma.RestaurantCreateNestedOneWithoutStaffInput
   user?: Prisma.UserCreateNestedOneWithoutStaffInput
 }
 
 export type StaffUncheckedCreateInput = {
   id?: string
-  name: string
-  email: string
+  restaurantId?: string | null
+  userId?: string | null
+  firstName: string
+  lastName: string
   phone?: string | null
-  role: string
+  position: $Enums.StaffPosition
   status?: $Enums.StaffStatus
   createdAt?: Date | string
-  userId?: string | null
+  updatedAt?: Date | string
 }
 
 export type StaffUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.EnumStaffPositionFieldUpdateOperationsInput | $Enums.StaffPosition
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  restaurant?: Prisma.RestaurantUpdateOneWithoutStaffNestedInput
   user?: Prisma.UserUpdateOneWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  restaurantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.EnumStaffPositionFieldUpdateOperationsInput | $Enums.StaffPosition
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StaffCreateManyInput = {
   id?: string
-  name: string
-  email: string
+  restaurantId?: string | null
+  userId?: string | null
+  firstName: string
+  lastName: string
   phone?: string | null
-  role: string
+  position: $Enums.StaffPosition
   status?: $Enums.StaffStatus
   createdAt?: Date | string
-  userId?: string | null
+  updatedAt?: Date | string
 }
 
 export type StaffUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.EnumStaffPositionFieldUpdateOperationsInput | $Enums.StaffPosition
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StaffUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  restaurantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.EnumStaffPositionFieldUpdateOperationsInput | $Enums.StaffPosition
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StaffListRelationFilter = {
+  every?: Prisma.StaffWhereInput
+  some?: Prisma.StaffWhereInput
+  none?: Prisma.StaffWhereInput
+}
+
+export type StaffOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type StaffNullableScalarRelationFilter = {
@@ -347,35 +397,83 @@ export type StaffNullableScalarRelationFilter = {
 
 export type StaffCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  restaurantId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  role?: Prisma.SortOrder
+  position?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type StaffMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  restaurantId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  role?: Prisma.SortOrder
+  position?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type StaffMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  restaurantId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  role?: Prisma.SortOrder
+  position?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type StaffCreateNestedManyWithoutRestaurantInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutRestaurantInput, Prisma.StaffUncheckedCreateWithoutRestaurantInput> | Prisma.StaffCreateWithoutRestaurantInput[] | Prisma.StaffUncheckedCreateWithoutRestaurantInput[]
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutRestaurantInput | Prisma.StaffCreateOrConnectWithoutRestaurantInput[]
+  createMany?: Prisma.StaffCreateManyRestaurantInputEnvelope
+  connect?: Prisma.StaffWhereUniqueInput | Prisma.StaffWhereUniqueInput[]
+}
+
+export type StaffUncheckedCreateNestedManyWithoutRestaurantInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutRestaurantInput, Prisma.StaffUncheckedCreateWithoutRestaurantInput> | Prisma.StaffCreateWithoutRestaurantInput[] | Prisma.StaffUncheckedCreateWithoutRestaurantInput[]
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutRestaurantInput | Prisma.StaffCreateOrConnectWithoutRestaurantInput[]
+  createMany?: Prisma.StaffCreateManyRestaurantInputEnvelope
+  connect?: Prisma.StaffWhereUniqueInput | Prisma.StaffWhereUniqueInput[]
+}
+
+export type StaffUpdateManyWithoutRestaurantNestedInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutRestaurantInput, Prisma.StaffUncheckedCreateWithoutRestaurantInput> | Prisma.StaffCreateWithoutRestaurantInput[] | Prisma.StaffUncheckedCreateWithoutRestaurantInput[]
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutRestaurantInput | Prisma.StaffCreateOrConnectWithoutRestaurantInput[]
+  upsert?: Prisma.StaffUpsertWithWhereUniqueWithoutRestaurantInput | Prisma.StaffUpsertWithWhereUniqueWithoutRestaurantInput[]
+  createMany?: Prisma.StaffCreateManyRestaurantInputEnvelope
+  set?: Prisma.StaffWhereUniqueInput | Prisma.StaffWhereUniqueInput[]
+  disconnect?: Prisma.StaffWhereUniqueInput | Prisma.StaffWhereUniqueInput[]
+  delete?: Prisma.StaffWhereUniqueInput | Prisma.StaffWhereUniqueInput[]
+  connect?: Prisma.StaffWhereUniqueInput | Prisma.StaffWhereUniqueInput[]
+  update?: Prisma.StaffUpdateWithWhereUniqueWithoutRestaurantInput | Prisma.StaffUpdateWithWhereUniqueWithoutRestaurantInput[]
+  updateMany?: Prisma.StaffUpdateManyWithWhereWithoutRestaurantInput | Prisma.StaffUpdateManyWithWhereWithoutRestaurantInput[]
+  deleteMany?: Prisma.StaffScalarWhereInput | Prisma.StaffScalarWhereInput[]
+}
+
+export type StaffUncheckedUpdateManyWithoutRestaurantNestedInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutRestaurantInput, Prisma.StaffUncheckedCreateWithoutRestaurantInput> | Prisma.StaffCreateWithoutRestaurantInput[] | Prisma.StaffUncheckedCreateWithoutRestaurantInput[]
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutRestaurantInput | Prisma.StaffCreateOrConnectWithoutRestaurantInput[]
+  upsert?: Prisma.StaffUpsertWithWhereUniqueWithoutRestaurantInput | Prisma.StaffUpsertWithWhereUniqueWithoutRestaurantInput[]
+  createMany?: Prisma.StaffCreateManyRestaurantInputEnvelope
+  set?: Prisma.StaffWhereUniqueInput | Prisma.StaffWhereUniqueInput[]
+  disconnect?: Prisma.StaffWhereUniqueInput | Prisma.StaffWhereUniqueInput[]
+  delete?: Prisma.StaffWhereUniqueInput | Prisma.StaffWhereUniqueInput[]
+  connect?: Prisma.StaffWhereUniqueInput | Prisma.StaffWhereUniqueInput[]
+  update?: Prisma.StaffUpdateWithWhereUniqueWithoutRestaurantInput | Prisma.StaffUpdateWithWhereUniqueWithoutRestaurantInput[]
+  updateMany?: Prisma.StaffUpdateManyWithWhereWithoutRestaurantInput | Prisma.StaffUpdateManyWithWhereWithoutRestaurantInput[]
+  deleteMany?: Prisma.StaffScalarWhereInput | Prisma.StaffScalarWhereInput[]
 }
 
 export type StaffCreateNestedOneWithoutUserInput = {
@@ -410,32 +508,102 @@ export type StaffUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutUserInput, Prisma.StaffUpdateWithoutUserInput>, Prisma.StaffUncheckedUpdateWithoutUserInput>
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type EnumStaffPositionFieldUpdateOperationsInput = {
+  set?: $Enums.StaffPosition
 }
 
 export type EnumStaffStatusFieldUpdateOperationsInput = {
   set?: $Enums.StaffStatus
 }
 
-export type StaffCreateWithoutUserInput = {
+export type StaffCreateWithoutRestaurantInput = {
   id?: string
-  name: string
-  email: string
+  firstName: string
+  lastName: string
   phone?: string | null
-  role: string
+  position: $Enums.StaffPosition
   status?: $Enums.StaffStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutStaffInput
+}
+
+export type StaffUncheckedCreateWithoutRestaurantInput = {
+  id?: string
+  userId?: string | null
+  firstName: string
+  lastName: string
+  phone?: string | null
+  position: $Enums.StaffPosition
+  status?: $Enums.StaffStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type StaffCreateOrConnectWithoutRestaurantInput = {
+  where: Prisma.StaffWhereUniqueInput
+  create: Prisma.XOR<Prisma.StaffCreateWithoutRestaurantInput, Prisma.StaffUncheckedCreateWithoutRestaurantInput>
+}
+
+export type StaffCreateManyRestaurantInputEnvelope = {
+  data: Prisma.StaffCreateManyRestaurantInput | Prisma.StaffCreateManyRestaurantInput[]
+  skipDuplicates?: boolean
+}
+
+export type StaffUpsertWithWhereUniqueWithoutRestaurantInput = {
+  where: Prisma.StaffWhereUniqueInput
+  update: Prisma.XOR<Prisma.StaffUpdateWithoutRestaurantInput, Prisma.StaffUncheckedUpdateWithoutRestaurantInput>
+  create: Prisma.XOR<Prisma.StaffCreateWithoutRestaurantInput, Prisma.StaffUncheckedCreateWithoutRestaurantInput>
+}
+
+export type StaffUpdateWithWhereUniqueWithoutRestaurantInput = {
+  where: Prisma.StaffWhereUniqueInput
+  data: Prisma.XOR<Prisma.StaffUpdateWithoutRestaurantInput, Prisma.StaffUncheckedUpdateWithoutRestaurantInput>
+}
+
+export type StaffUpdateManyWithWhereWithoutRestaurantInput = {
+  where: Prisma.StaffScalarWhereInput
+  data: Prisma.XOR<Prisma.StaffUpdateManyMutationInput, Prisma.StaffUncheckedUpdateManyWithoutRestaurantInput>
+}
+
+export type StaffScalarWhereInput = {
+  AND?: Prisma.StaffScalarWhereInput | Prisma.StaffScalarWhereInput[]
+  OR?: Prisma.StaffScalarWhereInput[]
+  NOT?: Prisma.StaffScalarWhereInput | Prisma.StaffScalarWhereInput[]
+  id?: Prisma.StringFilter<"Staff"> | string
+  restaurantId?: Prisma.StringNullableFilter<"Staff"> | string | null
+  userId?: Prisma.StringNullableFilter<"Staff"> | string | null
+  firstName?: Prisma.StringFilter<"Staff"> | string
+  lastName?: Prisma.StringFilter<"Staff"> | string
+  phone?: Prisma.StringNullableFilter<"Staff"> | string | null
+  position?: Prisma.EnumStaffPositionFilter<"Staff"> | $Enums.StaffPosition
+  status?: Prisma.EnumStaffStatusFilter<"Staff"> | $Enums.StaffStatus
+  createdAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
+}
+
+export type StaffCreateWithoutUserInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  phone?: string | null
+  position: $Enums.StaffPosition
+  status?: $Enums.StaffStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  restaurant?: Prisma.RestaurantCreateNestedOneWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutUserInput = {
   id?: string
-  name: string
-  email: string
+  restaurantId?: string | null
+  firstName: string
+  lastName: string
   phone?: string | null
-  role: string
+  position: $Enums.StaffPosition
   status?: $Enums.StaffStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type StaffCreateOrConnectWithoutUserInput = {
@@ -456,98 +624,167 @@ export type StaffUpdateToOneWithWhereWithoutUserInput = {
 
 export type StaffUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.EnumStaffPositionFieldUpdateOperationsInput | $Enums.StaffPosition
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  restaurant?: Prisma.RestaurantUpdateOneWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  restaurantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.EnumStaffPositionFieldUpdateOperationsInput | $Enums.StaffPosition
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StaffCreateManyRestaurantInput = {
+  id?: string
+  userId?: string | null
+  firstName: string
+  lastName: string
+  phone?: string | null
+  position: $Enums.StaffPosition
+  status?: $Enums.StaffStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type StaffUpdateWithoutRestaurantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.EnumStaffPositionFieldUpdateOperationsInput | $Enums.StaffPosition
+  status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutStaffNestedInput
+}
+
+export type StaffUncheckedUpdateWithoutRestaurantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.EnumStaffPositionFieldUpdateOperationsInput | $Enums.StaffPosition
+  status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StaffUncheckedUpdateManyWithoutRestaurantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.EnumStaffPositionFieldUpdateOperationsInput | $Enums.StaffPosition
+  status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
 
 export type StaffSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
-  email?: boolean
+  restaurantId?: boolean
+  userId?: boolean
+  firstName?: boolean
+  lastName?: boolean
   phone?: boolean
-  role?: boolean
+  position?: boolean
   status?: boolean
   createdAt?: boolean
-  userId?: boolean
+  updatedAt?: boolean
+  restaurant?: boolean | Prisma.Staff$restaurantArgs<ExtArgs>
   user?: boolean | Prisma.Staff$userArgs<ExtArgs>
 }, ExtArgs["result"]["staff"]>
 
 export type StaffSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
-  email?: boolean
+  restaurantId?: boolean
+  userId?: boolean
+  firstName?: boolean
+  lastName?: boolean
   phone?: boolean
-  role?: boolean
+  position?: boolean
   status?: boolean
   createdAt?: boolean
-  userId?: boolean
+  updatedAt?: boolean
+  restaurant?: boolean | Prisma.Staff$restaurantArgs<ExtArgs>
   user?: boolean | Prisma.Staff$userArgs<ExtArgs>
 }, ExtArgs["result"]["staff"]>
 
 export type StaffSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
-  email?: boolean
+  restaurantId?: boolean
+  userId?: boolean
+  firstName?: boolean
+  lastName?: boolean
   phone?: boolean
-  role?: boolean
+  position?: boolean
   status?: boolean
   createdAt?: boolean
-  userId?: boolean
+  updatedAt?: boolean
+  restaurant?: boolean | Prisma.Staff$restaurantArgs<ExtArgs>
   user?: boolean | Prisma.Staff$userArgs<ExtArgs>
 }, ExtArgs["result"]["staff"]>
 
 export type StaffSelectScalar = {
   id?: boolean
-  name?: boolean
-  email?: boolean
+  restaurantId?: boolean
+  userId?: boolean
+  firstName?: boolean
+  lastName?: boolean
   phone?: boolean
-  role?: boolean
+  position?: boolean
   status?: boolean
   createdAt?: boolean
-  userId?: boolean
+  updatedAt?: boolean
 }
 
-export type StaffOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "role" | "status" | "createdAt" | "userId", ExtArgs["result"]["staff"]>
+export type StaffOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "restaurantId" | "userId" | "firstName" | "lastName" | "phone" | "position" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["staff"]>
 export type StaffInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  restaurant?: boolean | Prisma.Staff$restaurantArgs<ExtArgs>
   user?: boolean | Prisma.Staff$userArgs<ExtArgs>
 }
 export type StaffIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  restaurant?: boolean | Prisma.Staff$restaurantArgs<ExtArgs>
   user?: boolean | Prisma.Staff$userArgs<ExtArgs>
 }
 export type StaffIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  restaurant?: boolean | Prisma.Staff$restaurantArgs<ExtArgs>
   user?: boolean | Prisma.Staff$userArgs<ExtArgs>
 }
 
 export type $StaffPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Staff"
   objects: {
+    restaurant: Prisma.$RestaurantPayload<ExtArgs> | null
     user: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    name: string
-    email: string
+    restaurantId: string | null
+    userId: string | null
+    firstName: string
+    lastName: string
     phone: string | null
-    role: string
+    position: $Enums.StaffPosition
     status: $Enums.StaffStatus
     createdAt: Date
-    userId: string | null
+    updatedAt: Date
   }, ExtArgs["result"]["staff"]>
   composites: {}
 }
@@ -942,6 +1179,7 @@ readonly fields: StaffFieldRefs;
  */
 export interface Prisma__StaffClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  restaurant<T extends Prisma.Staff$restaurantArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$restaurantArgs<ExtArgs>>): Prisma.Prisma__RestaurantClient<runtime.Types.Result.GetResult<Prisma.$RestaurantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.Staff$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -973,13 +1211,15 @@ export interface Prisma__StaffClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface StaffFieldRefs {
   readonly id: Prisma.FieldRef<"Staff", 'String'>
-  readonly name: Prisma.FieldRef<"Staff", 'String'>
-  readonly email: Prisma.FieldRef<"Staff", 'String'>
+  readonly restaurantId: Prisma.FieldRef<"Staff", 'String'>
+  readonly userId: Prisma.FieldRef<"Staff", 'String'>
+  readonly firstName: Prisma.FieldRef<"Staff", 'String'>
+  readonly lastName: Prisma.FieldRef<"Staff", 'String'>
   readonly phone: Prisma.FieldRef<"Staff", 'String'>
-  readonly role: Prisma.FieldRef<"Staff", 'String'>
+  readonly position: Prisma.FieldRef<"Staff", 'StaffPosition'>
   readonly status: Prisma.FieldRef<"Staff", 'StaffStatus'>
   readonly createdAt: Prisma.FieldRef<"Staff", 'DateTime'>
-  readonly userId: Prisma.FieldRef<"Staff", 'String'>
+  readonly updatedAt: Prisma.FieldRef<"Staff", 'DateTime'>
 }
     
 
@@ -1378,6 +1618,25 @@ export type StaffDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Staff to delete.
    */
   limit?: number
+}
+
+/**
+ * Staff.restaurant
+ */
+export type Staff$restaurantArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Restaurant
+   */
+  select?: Prisma.RestaurantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Restaurant
+   */
+  omit?: Prisma.RestaurantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RestaurantInclude<ExtArgs> | null
+  where?: Prisma.RestaurantWhereInput
 }
 
 /**

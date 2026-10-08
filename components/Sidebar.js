@@ -8,6 +8,7 @@ import {
   ShoppingCart,
   Package,
   Users,
+  UserRound,
   ChartNoAxesCombined,
   LogOut,
   Menu,
@@ -75,6 +76,12 @@ export default function Sidebar() {
       name: "Orders / POS",
       href: "/orders",
       icon: ShoppingCart,
+      roles: ["ADMIN", "MANAGER", "STAFF"],
+    },
+    {
+      name: "Customers",
+      href: "/customers",
+      icon: UserRound,
       roles: ["ADMIN", "MANAGER", "STAFF"],
     },
     {
@@ -177,7 +184,7 @@ export default function Sidebar() {
         <nav className="flex-1 overflow-y-auto p-4">
           {loading ? (
             <div className="space-y-2">
-              {[1, 2, 3, 4, 5, 6].map((item) => (
+              {[1, 2, 3, 4, 5, 6, 7].map((item) => (
                 <div
                   key={item}
                   className="h-11 animate-pulse rounded-lg bg-gray-900"
@@ -248,3 +255,4 @@ export default function Sidebar() {
     </>
   );
 }
+

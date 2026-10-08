@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
 
   const [email, setEmail] = useState("admin@restaurant.com");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -79,10 +81,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <form
-            onSubmit={handleLogin}
-            className="space-y-5"
-          >
+          <form onSubmit={handleLogin} className="space-y-5">
 
             {/* Email */}
             <div>
@@ -106,14 +105,31 @@ export default function LoginPage() {
                 Password
               </label>
 
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  required
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 pr-12 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((current) => !current)}
+                  aria-label={
+                    showPassword ? "Hide password" : "Show password"
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Error */}
@@ -133,7 +149,6 @@ export default function LoginPage() {
             </button>
 
           </form>
-
         </div>
 
         <p className="mt-6 text-center text-xs text-gray-500">
@@ -144,3 +159,4 @@ export default function LoginPage() {
     </main>
   );
 }
+

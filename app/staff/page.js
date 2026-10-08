@@ -1,7 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
+
+const roleLabels = {
+  ADMIN: "Administrator",
+  MANAGER: "Manager",
+  STAFF: "Staff",
+};
+
+const positionLabels = {
+  MANAGER: "Manager",
+  SALESPERSON: "Salesperson",
+  CASHIER: "Cashier",
+  KITCHEN_STAFF: "Kitchen Staff",
+  WAITER: "Waiter",
+  INVENTORY_STAFF: "Inventory Staff",
+};
 
 export default function StaffPage() {
   const [staff, setStaff] = useState([]);
@@ -9,14 +25,18 @@ export default function StaffPage() {
 
   const [showForm, setShowForm] = useState(false);
   const [editingStaff, setEditingStaff] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [search, setSearch] = useState("");
 
   const [form, setForm] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
-    role: "Staff",
+    role: "STAFF",
+    position: "SALESPERSON",
+    password: "",
     status: "ACTIVE",
   });
 
@@ -31,9 +51,12 @@ export default function StaffPage() {
 
       if (data.success) {
         setStaff(data.staff);
+      } else {
+        alert(data.error || "Failed to load staff.");
       }
     } catch (error) {
       console.error("Failed to load staff:", error);
+      alert("Failed to load staff.");
     } finally {
       setLoading(false);
     }
@@ -41,15 +64,37 @@ export default function StaffPage() {
 
   function resetForm() {
     setForm({
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       phone: "",
-      role: "Staff",
+      role: "STAFF",
+      position: "SALESPERSON",
+      password: "",
       status: "ACTIVE",
     });
 
     setEditingStaff(null);
+    setShowPassword(false);
     setShowForm(false);
+  }
+
+  function openAddForm() {
+    setEditingStaff(null);
+
+    setForm({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      role: "STAFF",
+      position: "SALESPERSON",
+      password: "",
+      status: "ACTIVE",
+    });
+
+    setShowPassword(false);
+    setShowForm(true);
   }
 
   function handleChange(e) {
@@ -64,22 +109,54 @@ export default function StaffPage() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (!form.name || !form.email || !form.role) {
-      alert("Please fill in the required fields.");
+    if (
+      !form.firstName.trim() ||
+      !form.lastName.trim() ||
+      !form.email.trim() ||
+      !form.role ||
+      !form.position
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    if (!editingStaff && !form.password) {
+      alert("Please create a password for the staff account.");
+      return;
+    }
+
+    if (!editingStaff && form.password.length < 6) {
+      alert("Password must be at least 6 characters.");
       return;
     }
 
     try {
-      const url = editingStaff ? `/api/staff/${editingStaff.id}` : "/api/staff";
+      const url = editingStaff
+        ? `/api/staff/${editingStaff.id}`
+        : "/api/staff";
 
       const method = editingStaff ? "PATCH" : "POST";
+
+      const payload = {
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        email: form.email.trim().toLowerCase(),
+        phone: form.phone.trim(),
+        role: form.role,
+        position: form.position,
+        status: form.status,
+      };
+
+      if (form.password.trim()) {
+        payload.password = form.password;
+      }
 
       const response = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -102,7 +179,7 @@ export default function StaffPage() {
       resetForm();
     } catch (error) {
       console.error("SAVE STAFF ERROR:", error);
-      alert("Something went wrong.");
+      alert("Something went wrong while saving the staff account.");
     }
   }
 
@@ -110,18 +187,23 @@ export default function StaffPage() {
     setEditingStaff(member);
 
     setForm({
-      name: member.name,
-      email: member.email,
+      firstName: member.firstName || "",
+      lastName: member.lastName || "",
+      email: member.email || "",
       phone: member.phone || "",
-      role: member.role,
-      status: member.status,
+      role: member.role || "STAFF",
+      position: member.position || "SALESPERSON",
+      password: "",
+      status: member.status || "ACTIVE",
     });
 
+    setShowPassword(false);
     setShowForm(true);
   }
 
   async function toggleStatus(member) {
-    const newStatus = member.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+    const newStatus =
+      member.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
 
     try {
       const response = await fetch(`/api/staff/${member.id}`, {
@@ -142,16 +224,19 @@ export default function StaffPage() {
       }
 
       setStaff((prev) =>
-        prev.map((item) => (item.id === member.id ? data.staff : item)),
+        prev.map((item) =>
+          item.id === member.id ? data.staff : item,
+        ),
       );
     } catch (error) {
       console.error("STATUS UPDATE ERROR:", error);
+      alert("Something went wrong while updating the status.");
     }
   }
 
   async function deleteStaff(id) {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this staff member?",
+      "Are you sure you want to delete this staff account? This action cannot be undone.",
     );
 
     if (!confirmed) return;
@@ -171,16 +256,22 @@ export default function StaffPage() {
       setStaff((prev) => prev.filter((member) => member.id !== id));
     } catch (error) {
       console.error("DELETE STAFF ERROR:", error);
+      alert("Something went wrong while deleting the staff account.");
     }
   }
 
   const filteredStaff = staff.filter((member) => {
-    const query = search.toLowerCase();
+    const query = search.toLowerCase().trim();
+
+    const fullName =
+      `${member.firstName || ""} ${member.lastName || ""}`.toLowerCase();
 
     return (
-      member.name.toLowerCase().includes(query) ||
-      member.email.toLowerCase().includes(query) ||
-      member.role.toLowerCase().includes(query)
+      fullName.includes(query) ||
+      (member.email || "").toLowerCase().includes(query) ||
+      (member.role || "").toLowerCase().includes(query) ||
+      (member.position || "").toLowerCase().includes(query) ||
+      (member.phone || "").toLowerCase().includes(query)
     );
   });
 
@@ -194,35 +285,21 @@ export default function StaffPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900">
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main */}
       <main className="ml-0 min-h-screen p-4 pt-20 sm:p-6 sm:pt-20 md:ml-64 md:p-8 md:pt-8">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-3xl font-bold">Staff Management</h2>
 
             <p className="mt-1 text-gray-500">
-              Manage restaurant employees and their roles
+              Manage employee accounts, roles, positions and access.
             </p>
           </div>
 
           <button
-            onClick={() => {
-              setEditingStaff(null);
-
-              setForm({
-                name: "",
-                email: "",
-                phone: "",
-                role: "Staff",
-                status: "ACTIVE",
-              });
-
-              setShowForm(true);
-            }}
+            onClick={openAddForm}
             className="rounded-lg bg-gray-900 px-5 py-3 font-medium text-white hover:bg-gray-800"
           >
             + Add Staff
@@ -234,7 +311,9 @@ export default function StaffPage() {
           <div className="rounded-xl bg-white p-6 shadow-sm">
             <p className="text-sm text-gray-500">Total Staff</p>
 
-            <p className="mt-2 text-3xl font-bold">{staff.length}</p>
+            <p className="mt-2 text-3xl font-bold">
+              {staff.length}
+            </p>
           </div>
 
           <div className="rounded-xl bg-white p-6 shadow-sm">
@@ -258,7 +337,7 @@ export default function StaffPage() {
         <div className="mb-6 rounded-xl bg-white p-5 shadow-sm">
           <input
             type="text"
-            placeholder="Search staff by name, email or role..."
+            placeholder="Search by name, email, phone, role or position..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
@@ -285,118 +364,144 @@ export default function StaffPage() {
               <div className="text-5xl">👥</div>
 
               <h3 className="mt-4 text-lg font-semibold">
-                No staff members yet
+                No staff members found
               </h3>
 
               <p className="mt-1 text-gray-500">
-                Add your first employee to get started.
+                Try a different search or add a new employee.
               </p>
             </div>
           ) : (
-            <div className="rounded-xl bg-white p-4 shadow-sm sm:p-6">
-              <div className="w-full overflow-x-auto">
-                <table className="w-full min-w-175">
-                  <thead className="bg-gray-50 text-left text-sm text-gray-500">
-                    <tr>
-                      <th className="px-6 py-4 font-medium">Employee</th>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-237.5">
+                <thead className="bg-gray-50 text-left text-sm text-gray-500">
+                  <tr>
+                    <th className="px-6 py-4 font-medium">
+                      Employee
+                    </th>
 
-                      <th className="px-6 py-4 font-medium">Contact</th>
+                    <th className="px-6 py-4 font-medium">
+                      Contact
+                    </th>
 
-                      <th className="px-6 py-4 font-medium">Role</th>
+                    <th className="px-6 py-4 font-medium">
+                      System Role
+                    </th>
 
-                      <th className="px-6 py-4 font-medium">Status</th>
+                    <th className="px-6 py-4 font-medium">
+                      Position
+                    </th>
 
-                      <th className="px-6 py-4 text-right font-medium">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
+                    <th className="px-6 py-4 font-medium">
+                      Status
+                    </th>
 
-                  <tbody className="divide-y">
-                    {filteredStaff.map((member) => (
-                      <tr key={member.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4">
-                          <p className="font-semibold">{member.name}</p>
-                        </td>
+                    <th className="px-6 py-4 text-right font-medium">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
 
-                        <td className="px-6 py-4">
-                          <p className="text-sm">{member.email}</p>
+                <tbody className="divide-y">
+                  {filteredStaff.map((member) => (
+                    <tr
+                      key={member.id}
+                      className="hover:bg-gray-50"
+                    >
+                      <td className="px-6 py-4">
+                        <p className="font-semibold">
+                          {member.firstName} {member.lastName}
+                        </p>
+                      </td>
 
-                          {member.phone && (
-                            <p className="mt-1 text-sm text-gray-500">
-                              {member.phone}
-                            </p>
-                          )}
-                        </td>
+                      <td className="px-6 py-4">
+                        <p className="text-sm">
+                          {member.email}
+                        </p>
 
-                        <td className="px-6 py-4">
-                          <span className="rounded-lg bg-gray-100 px-3 py-1 text-sm font-medium">
-                            {member.role}
+                        {member.phone && (
+                          <p className="mt-1 text-sm text-gray-500">
+                            {member.phone}
+                          </p>
+                        )}
+                      </td>
+
+                      <td className="px-6 py-4">
+                        <span className="rounded-lg bg-gray-100 px-3 py-1 text-sm font-medium">
+                          {roleLabels[member.role] || member.role}
+                        </span>
+                      </td>
+
+                      <td className="px-6 py-4">
+                        <span className="text-sm font-medium text-gray-700">
+                          {positionLabels[member.position] ||
+                            member.position}
+                        </span>
+                      </td>
+
+                      <td className="px-6 py-4">
+                        {member.status === "ACTIVE" ? (
+                          <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+                            Active
                           </span>
-                        </td>
+                        ) : (
+                          <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
+                            Inactive
+                          </span>
+                        )}
+                      </td>
 
-                        <td className="px-6 py-4">
-                          {member.status === "ACTIVE" ? (
-                            <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
-                              Active
-                            </span>
-                          ) : (
-                            <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
-                              Inactive
-                            </span>
-                          )}
-                        </td>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            onClick={() => startEditing(member)}
+                            className="rounded-lg border px-3 py-2 text-sm hover:bg-gray-100"
+                          >
+                            Edit
+                          </button>
 
-                        <td className="px-6 py-4">
-                          <div className="flex justify-end gap-2">
-                            <button
-                              onClick={() => startEditing(member)}
-                              className="rounded-lg border px-3 py-2 text-sm hover:bg-gray-100"
-                            >
-                              Edit
-                            </button>
+                          <button
+                            onClick={() => toggleStatus(member)}
+                            className="rounded-lg border px-3 py-2 text-sm hover:bg-gray-100"
+                          >
+                            {member.status === "ACTIVE"
+                              ? "Deactivate"
+                              : "Activate"}
+                          </button>
 
-                            <button
-                              onClick={() => toggleStatus(member)}
-                              className="rounded-lg border px-3 py-2 text-sm hover:bg-gray-100"
-                            >
-                              {member.status === "ACTIVE"
-                                ? "Deactivate"
-                                : "Activate"}
-                            </button>
-
-                            <button
-                              onClick={() => deleteStaff(member.id)}
-                              className="rounded-lg border border-red-200 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              </div>
-          )}
+                          <button
+                            onClick={() => deleteStaff(member.id)}
+                            className="rounded-lg border border-red-200 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
+          )}
+        </div>
       </main>
 
       {/* Add/Edit Modal */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-7 shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-4">
+          <div className="my-8 w-full max-w-2xl rounded-2xl bg-white p-7 shadow-xl">
             <div className="mb-6 flex items-center justify-between">
               <div>
                 <h3 className="text-2xl font-bold">
-                  {editingStaff ? "Edit Staff Member" : "Add Staff Member"}
+                  {editingStaff
+                    ? "Edit Staff Member"
+                    : "Add Staff Member"}
                 </h3>
 
                 <p className="mt-1 text-sm text-gray-500">
                   {editingStaff
-                    ? "Update employee information."
-                    : "Add a new employee to the restaurant."}
+                    ? "Update employee information and account access."
+                    : "Create a new employee account."}
                 </p>
               </div>
 
@@ -409,56 +514,75 @@ export default function StaffPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Name */}
-              <div>
-                <label className="mb-2 block text-sm font-medium">
-                  Full Name *
-                </label>
-
-                <input
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="e.g. John Mensah"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="mb-2 block text-sm font-medium">
-                  Email *
-                </label>
-
-                <input
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="employee@example.com"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className="mb-2 block text-sm font-medium">Phone</label>
-
-                <input
-                  name="phone"
-                  type="tel"
-                  value={form.phone}
-                  onChange={handleChange}
-                  placeholder="024 XXX XXXX"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
-                />
-              </div>
-
-              {/* Role + Status */}
-              <div className="grid grid-cols-2 gap-4">
+              {/* Names */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium">
-                    Role *
+                    First Name *
+                  </label>
+
+                  <input
+                    name="firstName"
+                    value={form.firstName}
+                    onChange={handleChange}
+                    placeholder="e.g. John"
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium">
+                    Last Name *
+                  </label>
+
+                  <input
+                    name="lastName"
+                    value={form.lastName}
+                    onChange={handleChange}
+                    placeholder="e.g. Mensah"
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
+                  />
+                </div>
+              </div>
+
+              {/* Email + Phone */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-sm font-medium">
+                    Email *
+                  </label>
+
+                  <input
+                    name="email"
+                    type="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="employee@example.com"
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium">
+                    Phone
+                  </label>
+
+                  <input
+                    name="phone"
+                    type="tel"
+                    value={form.phone}
+                    onChange={handleChange}
+                    placeholder="024 XXX XXXX"
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
+                  />
+                </div>
+              </div>
+
+              {/* Role + Position */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-sm font-medium">
+                    System Role *
                   </label>
 
                   <select
@@ -467,23 +591,92 @@ export default function StaffPage() {
                     onChange={handleChange}
                     className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
                   >
-                    <option value="Manager">Manager</option>
-
-                    <option value="Chef">Chef</option>
-
-                    <option value="Cashier">Cashier</option>
-
-                    <option value="Waiter">Waiter</option>
-
-                    <option value="Kitchen Staff">Kitchen Staff</option>
-
-                    <option value="Staff">Staff</option>
+                    <option value="STAFF">Staff</option>
+                    <option value="MANAGER">Manager</option>
+                    <option value="ADMIN">Administrator</option>
                   </select>
+
+                  <p className="mt-1 text-xs text-gray-500">
+                    Controls what the employee can access.
+                  </p>
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium">
-                    Status
+                    Position *
+                  </label>
+
+                  <select
+                    name="position"
+                    value={form.position}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
+                  >
+                    <option value="MANAGER">Manager</option>
+                    <option value="SALESPERSON">Salesperson</option>
+                    <option value="CASHIER">Cashier</option>
+                    <option value="KITCHEN_STAFF">
+                      Kitchen Staff
+                    </option>
+                    <option value="WAITER">Waiter</option>
+                    <option value="INVENTORY_STAFF">
+                      Inventory Staff
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Password + Status */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-sm font-medium">
+                    Password {!editingStaff && "*"}
+                  </label>
+
+                  <div className="relative">
+                    <input
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      value={form.password}
+                      onChange={handleChange}
+                      placeholder={
+                        editingStaff
+                          ? "Leave blank to keep current"
+                          : "Minimum 6 characters"
+                      }
+                      className="w-full rounded-lg border border-gray-300 px-4 py-3 pr-12 outline-none focus:border-gray-900"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowPassword((current) => !current)
+                      }
+                      aria-label={
+                        showPassword
+                          ? "Hide password"
+                          : "Show password"
+                      }
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-gray-700"
+                    >
+                      {showPassword ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
+                    </button>
+                  </div>
+
+                  {editingStaff && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      Only enter a password if you want to change it.
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium">
+                    Account Status
                   </label>
 
                   <select
@@ -493,7 +686,6 @@ export default function StaffPage() {
                     className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
                   >
                     <option value="ACTIVE">Active</option>
-
                     <option value="INACTIVE">Inactive</option>
                   </select>
                 </div>
@@ -513,7 +705,9 @@ export default function StaffPage() {
                   type="submit"
                   className="flex-1 rounded-lg bg-gray-900 px-4 py-3 font-medium text-white hover:bg-gray-800"
                 >
-                  {editingStaff ? "Save Changes" : "Add Staff"}
+                  {editingStaff
+                    ? "Save Changes"
+                    : "Create Account"}
                 </button>
               </div>
             </form>
@@ -523,3 +717,4 @@ export default function StaffPage() {
     </div>
   );
 }
+

@@ -18,8 +18,38 @@ export const UserRole = {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
+export const StaffStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type StaffStatus = (typeof StaffStatus)[keyof typeof StaffStatus]
+
+
+export const StaffPosition = {
+  MANAGER: 'MANAGER',
+  SALESPERSON: 'SALESPERSON',
+  CASHIER: 'CASHIER',
+  KITCHEN_STAFF: 'KITCHEN_STAFF',
+  WAITER: 'WAITER',
+  INVENTORY_STAFF: 'INVENTORY_STAFF'
+} as const
+
+export type StaffPosition = (typeof StaffPosition)[keyof typeof StaffPosition]
+
+
+export const OrderType = {
+  PICKUP: 'PICKUP',
+  DELIVERY: 'DELIVERY'
+} as const
+
+export type OrderType = (typeof OrderType)[keyof typeof OrderType]
+
+
 export const OrderStatus = {
   PENDING: 'PENDING',
+  PREPARING: 'PREPARING',
+  READY: 'READY',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'
 } as const
@@ -27,9 +57,29 @@ export const OrderStatus = {
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 
 
-export const StaffStatus = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE'
+export const PaymentMethod = {
+  CASH: 'CASH',
+  CARD: 'CARD',
+  MOBILE_MONEY: 'MOBILE_MONEY'
 } as const
 
-export type StaffStatus = (typeof StaffStatus)[keyof typeof StaffStatus]
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const InventoryTransactionType = {
+  STOCK_IN: 'STOCK_IN',
+  STOCK_OUT: 'STOCK_OUT',
+  ADJUSTMENT: 'ADJUSTMENT'
+} as const
+
+export type InventoryTransactionType = (typeof InventoryTransactionType)[keyof typeof InventoryTransactionType]

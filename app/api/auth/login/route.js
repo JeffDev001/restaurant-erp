@@ -26,6 +26,9 @@ export async function POST(request) {
       where: {
         email,
       },
+      include: {
+        restaurant: true,
+      },
     });
 
     if (!user) {
@@ -35,6 +38,42 @@ export async function POST(request) {
           error: "Invalid email or password.",
         },
         { status: 401 }
+      );
+    }
+
+    // Make sure the user account is active.
+    if (!user.isActive) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Your account has been deactivated. Please contact your restaurant administrator.",
+        },
+        { status: 403 }
+      );
+    }
+
+    // Every user in the SaaS must belong to a restaurant.
+    if (!user.restaurantId || !user.restaurant) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "This account is not connected to a restaurant.",
+        },
+        { status: 403 }
+      );
+    }
+
+    // Make sure the restaurant itself is active.
+    if (!user.restaurant.isActive) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "This restaurant account is currently inactive.",
+        },
+        { status: 403 }
       );
     }
 
@@ -57,11 +96,20 @@ export async function POST(request) {
 
     return NextResponse.json({
       success: true,
+
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
         role: user.role,
+
+        restaurantId: user.restaurantId,
+
+        restaurant: {
+          id: user.restaurant.id,
+          name: user.restaurant.name,
+          slug: user.restaurant.slug,
+        },
       },
     });
   } catch (error) {
@@ -76,3 +124,4 @@ export async function POST(request) {
     );
   }
 }
+

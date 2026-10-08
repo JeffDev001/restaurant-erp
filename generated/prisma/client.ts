@@ -16,12 +16,12 @@ import { fileURLToPath } from 'node:url'
 globalThis['__dirname'] = path.dirname(fileURLToPath(import.meta.url))
 
 import * as runtime from "@prisma/client/runtime/client"
-import * as $Enums from "./enums.ts"
-import * as $Class from "./internal/class.ts"
-import * as Prisma from "./internal/prismaNamespace.ts"
+import * as $Enums from "./enums"
+import * as $Class from "./internal/class"
+import * as Prisma from "./internal/prismaNamespace"
 
-export * as $Enums from './enums.ts'
-export * from "./enums.ts"
+export * as $Enums from './enums'
+export * from "./enums"
 /**
  * ## Prisma Client
  * 
@@ -31,8 +31,8 @@ export * from "./enums.ts"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Restaurants
+ * const restaurants = await prisma.restaurant.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -42,15 +42,30 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
+ * Model Restaurant
+ * 
+ */
+export type Restaurant = Prisma.RestaurantModel
+/**
  * Model User
  * 
  */
 export type User = Prisma.UserModel
 /**
+ * Model Customer
+ * 
+ */
+export type Customer = Prisma.CustomerModel
+/**
  * Model Staff
  * 
  */
 export type Staff = Prisma.StaffModel
+/**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel
 /**
  * Model MenuItem
  * 
@@ -67,12 +82,17 @@ export type Order = Prisma.OrderModel
  */
 export type OrderItem = Prisma.OrderItemModel
 /**
- * Model Inventory
- * 
- */
-export type Inventory = Prisma.InventoryModel
-/**
  * Model Sale
  * 
  */
 export type Sale = Prisma.SaleModel
+/**
+ * Model InventoryItem
+ * 
+ */
+export type InventoryItem = Prisma.InventoryItemModel
+/**
+ * Model InventoryTransaction
+ * 
+ */
+export type InventoryTransaction = Prisma.InventoryTransactionModel
